@@ -1,0 +1,631 @@
+<html>
+<head>
+<title>HomeFragment.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #0033b3;}
+.s1 { color: #080808;}
+.s2 { color: #8c8c8c; font-style: italic;}
+.s3 { color: #067d17;}
+</style>
+</head>
+<body bgcolor="#ffffff">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+HomeFragment.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">sg.edu.tp.todobuddyapp;</span>
+
+<span class="s0">import </span><span class="s1">android.app.ProgressDialog;</span>
+<span class="s0">import </span><span class="s1">android.content.Intent;</span>
+<span class="s0">import </span><span class="s1">android.os.Bundle;</span>
+<span class="s0">import </span><span class="s1">android.text.TextUtils;</span>
+<span class="s0">import </span><span class="s1">android.util.Log;</span>
+<span class="s0">import </span><span class="s1">android.view.LayoutInflater;</span>
+<span class="s0">import </span><span class="s1">android.view.Menu;</span>
+<span class="s0">import </span><span class="s1">android.view.MenuInflater;</span>
+<span class="s0">import </span><span class="s1">android.view.MenuItem;</span>
+
+<span class="s0">import </span><span class="s1">android.view.View;</span>
+<span class="s0">import </span><span class="s1">android.view.ViewGroup;</span>
+<span class="s0">import </span><span class="s1">android.widget.Button;</span>
+<span class="s0">import </span><span class="s1">android.widget.EditText;</span>
+<span class="s0">import </span><span class="s1">android.widget.TextView;</span>
+<span class="s0">import </span><span class="s1">android.widget.Toast;</span>
+
+<span class="s0">import </span><span class="s1">androidx.annotation.NonNull;</span>
+<span class="s0">import </span><span class="s1">androidx.annotation.Nullable;</span>
+<span class="s0">import </span><span class="s1">androidx.appcompat.app.AlertDialog;</span>
+<span class="s0">import </span><span class="s1">androidx.appcompat.app.AppCompatActivity;</span>
+<span class="s0">import </span><span class="s1">androidx.appcompat.widget.Toolbar;</span>
+<span class="s0">import </span><span class="s1">androidx.fragment.app.DialogFragment;</span>
+<span class="s0">import </span><span class="s1">androidx.fragment.app.Fragment;</span>
+<span class="s0">import </span><span class="s1">androidx.fragment.app.FragmentActivity;</span>
+<span class="s0">import </span><span class="s1">androidx.recyclerview.widget.LinearLayoutManager;</span>
+<span class="s0">import </span><span class="s1">androidx.recyclerview.widget.RecyclerView;</span>
+
+<span class="s0">import </span><span class="s1">com.firebase.ui.firestore.FirestoreRecyclerAdapter;</span>
+<span class="s0">import </span><span class="s1">com.firebase.ui.firestore.FirestoreRecyclerOptions;</span>
+<span class="s0">import </span><span class="s1">com.google.android.gms.tasks.OnFailureListener;</span>
+<span class="s0">import </span><span class="s1">com.google.android.gms.tasks.OnSuccessListener;</span>
+<span class="s0">import </span><span class="s1">com.google.firebase.firestore.CollectionReference;</span>
+<span class="s0">import </span><span class="s1">com.google.firebase.firestore.DocumentReference;</span>
+<span class="s0">import </span><span class="s1">com.google.firebase.firestore.DocumentSnapshot;</span>
+<span class="s0">import </span><span class="s1">com.google.firebase.firestore.EventListener;</span>
+<span class="s0">import </span><span class="s1">com.google.firebase.firestore.FirebaseFirestore;</span>
+<span class="s0">import </span><span class="s1">com.google.firebase.firestore.FirebaseFirestoreException;</span>
+<span class="s0">import </span><span class="s1">com.google.firebase.firestore.Query;</span>
+<span class="s0">import </span><span class="s1">com.google.firebase.firestore.QueryDocumentSnapshot;</span>
+<span class="s0">import </span><span class="s1">com.google.firebase.firestore.QuerySnapshot;</span>
+<span class="s0">import </span><span class="s1">com.wdullaer.materialdatetimepicker.date.DatePickerDialog;</span>
+<span class="s0">import </span><span class="s1">com.wdullaer.materialdatetimepicker.time.TimePickerDialog;</span>
+<span class="s0">import </span><span class="s1">com.allyants.notifyme.NotifyMe;</span>
+
+<span class="s0">import </span><span class="s1">com.firebase.ui.database.FirebaseRecyclerAdapter;</span>
+<span class="s0">import </span><span class="s1">com.firebase.ui.database.FirebaseRecyclerOptions;</span>
+<span class="s0">import </span><span class="s1">com.google.android.gms.tasks.OnCompleteListener;</span>
+<span class="s0">import </span><span class="s1">com.google.android.gms.tasks.Task;</span>
+<span class="s0">import </span><span class="s1">com.google.android.material.floatingactionbutton.FloatingActionButton;</span>
+<span class="s0">import </span><span class="s1">com.google.firebase.auth.FirebaseAuth;</span>
+<span class="s0">import </span><span class="s1">com.google.firebase.auth.FirebaseUser;</span>
+<span class="s0">import </span><span class="s1">com.google.firebase.database.DatabaseReference;</span>
+<span class="s0">import </span><span class="s1">com.google.firebase.database.FirebaseDatabase;</span>
+
+<span class="s0">import </span><span class="s1">java.text.DateFormat;</span>
+<span class="s0">import </span><span class="s1">java.util.ArrayList;</span>
+<span class="s0">import </span><span class="s1">java.util.Calendar;</span>
+<span class="s0">import </span><span class="s1">java.util.Date;</span>
+<span class="s0">import </span><span class="s1">java.util.HashMap;</span>
+<span class="s0">import </span><span class="s1">java.util.List;</span>
+<span class="s0">import </span><span class="s1">java.util.Map;</span>
+<span class="s0">import </span><span class="s1">java.util.UUID;</span>
+
+<span class="s0">import static </span><span class="s1">android.content.ContentValues.TAG;</span>
+
+<span class="s0">public class </span><span class="s1">HomeFragment </span><span class="s0">extends </span><span class="s1">Fragment {</span>
+    <span class="s0">private </span><span class="s1">Toolbar toolbar;</span>
+    <span class="s0">private </span><span class="s1">RecyclerView recyclerView;</span>
+    <span class="s0">private </span><span class="s1">FloatingActionButton floatingActionButton;</span>
+    <span class="s0">private </span><span class="s1">View HomeFragmentView;</span>
+
+    <span class="s0">private </span><span class="s1">DatabaseReference reference;</span>
+    <span class="s0">private </span><span class="s1">FirebaseAuth mAuth;</span>
+    <span class="s0">private </span><span class="s1">FirebaseUser mUser;</span>
+
+    <span class="s0">private </span><span class="s1">FirebaseFirestore db;</span>
+    <span class="s0">private </span><span class="s1">String onlineUserID;</span>
+    <span class="s2">// private TextView output;</span>
+    <span class="s0">public </span><span class="s1">String idUpdate =</span><span class="s3">&quot;&quot;</span><span class="s1">;</span>
+    <span class="s0">private </span><span class="s1">String docId;</span>
+    <span class="s0">private </span><span class="s1">ProgressDialog loader;</span>
+    <span class="s0">private </span><span class="s1">String key = </span><span class="s3">&quot;&quot;</span><span class="s1">;</span>
+    <span class="s0">private </span><span class="s1">String task;</span>
+    <span class="s0">private </span><span class="s1">String description;</span>
+    <span class="s0">private </span><span class="s1">String dateline;</span>
+    <span class="s0">private </span><span class="s1">TextView email;</span>
+    <span class="s0">private </span><span class="s1">String UID;</span>
+
+
+    <span class="s1">@Nullable</span>
+    <span class="s1">@Override</span>
+
+    <span class="s2">//The LayoutInflater class is used to instantiate the contents of layout XML files into their corresponding View objects.</span>
+    <span class="s2">// In other words, it takes an XML file as input and builds the View objects from it.</span>
+    <span class="s2">// using here as for fragment and the layout is in recyclerview -&gt; easier for complex layouts</span>
+
+
+    <span class="s0">public </span><span class="s1">View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {</span>
+
+        <span class="s1">MainActivity2 activity = (MainActivity2) getActivity();</span>
+
+
+        <span class="s1">FirebaseUser user = mAuth.getInstance().getCurrentUser();</span>
+        <span class="s2">//String uid = user.getUid();</span>
+        <span class="s1">HomeFragmentView = inflater.inflate(R.layout.fragment_home, container, </span><span class="s0">false</span><span class="s1">);</span>
+        <span class="s1">email = HomeFragmentView.findViewById(R.id.textView16);</span>
+        <span class="s1">Bundle results = activity.getMyData();</span>
+        <span class="s1">String value1 = results.getString(</span><span class="s3">&quot;val1&quot;</span><span class="s1">);</span>
+        <span class="s1">String value2 = results.getString(</span><span class="s3">&quot;val2&quot;</span><span class="s1">);</span>
+        <span class="s1">email.setText(value1);</span>
+        <span class="s1">UID = value2;</span>
+        <span class="s2">// initialise firebase instance</span>
+        <span class="s1">mAuth = FirebaseAuth.getInstance();</span>
+        <span class="s1">recyclerView = HomeFragmentView.findViewById(R.id.recyclerView);</span>
+        <span class="s2">// layoutManager Helps in positioning the items</span>
+        <span class="s2">// works similar to ListView, using a linear layout manager</span>
+        <span class="s1">LinearLayoutManager linearLayoutManager = </span><span class="s0">new </span><span class="s1">LinearLayoutManager(getContext());</span>
+
+
+        <span class="s1">linearLayoutManager.setReverseLayout(</span><span class="s0">true</span><span class="s1">);</span>
+        <span class="s1">linearLayoutManager.setStackFromEnd(</span><span class="s0">true</span><span class="s1">);</span>
+
+        <span class="s1">recyclerView.setHasFixedSize(</span><span class="s0">true</span><span class="s1">);</span>
+        <span class="s1">recyclerView.setLayoutManager(linearLayoutManager);</span>
+
+
+        <span class="s1">loader = </span><span class="s0">new </span><span class="s1">ProgressDialog(getContext());</span>
+
+        <span class="s1">reference = FirebaseDatabase.getInstance().getReference();</span>
+
+        <span class="s1">mUser = mAuth.getCurrentUser();</span>
+        <span class="s1">onlineUserID = mUser.getUid();</span>
+
+        <span class="s1">db = FirebaseFirestore.getInstance();</span>
+        <span class="s2">// reference.child(&quot;tasks&quot;).child(onlineUserID);</span>
+        <span class="s2">// reference = db.collection(&quot;users&quot;).document(onlineUserID);</span>
+
+        <span class="s1">floatingActionButton = HomeFragmentView.findViewById(R.id.fab);</span>
+        <span class="s2">// when user clicks the button , a dialog is created ==&gt; which opens the input_file</span>
+        <span class="s1">floatingActionButton.setOnClickListener(</span><span class="s0">new </span><span class="s1">View.OnClickListener() {</span>
+            <span class="s1">@Override</span>
+            <span class="s0">public void </span><span class="s1">onClick(View v) {</span>
+                <span class="s1">addTask();</span>
+            <span class="s1">}</span>
+
+        <span class="s1">});</span>
+        <span class="s0">return </span><span class="s1">HomeFragmentView;</span>
+    <span class="s1">}</span>
+
+
+    <span class="s0">private void </span><span class="s1">addTask() {</span>
+
+        <span class="s1">AlertDialog.Builder myDialog = </span><span class="s0">new </span><span class="s1">AlertDialog.Builder(getContext());</span>
+        <span class="s1">LayoutInflater inflater = LayoutInflater.from(getContext());</span>
+
+        <span class="s2">//links to the file</span>
+
+        <span class="s1">View myView = inflater.inflate(R.layout.input_file, </span><span class="s0">null</span><span class="s1">);</span>
+        <span class="s1">myDialog.setView(myView);</span>
+        <span class="s2">// myDialog.show();</span>
+
+
+        <span class="s0">final </span><span class="s1">AlertDialog dialog = myDialog.create();</span>
+        <span class="s1">dialog.setCancelable(</span><span class="s0">false</span><span class="s1">);</span>
+
+        <span class="s0">final </span><span class="s1">EditText task = myView.findViewById(R.id.task);</span>
+        <span class="s0">final </span><span class="s1">EditText description = myView.findViewById(R.id.description);</span>
+        <span class="s0">final </span><span class="s1">EditText dateline = myView.findViewById(R.id.dateline);</span>
+        <span class="s2">//   final TextView email = myView.findViewById(R.id.textView16);</span>
+        <span class="s1">Button save = myView.findViewById(R.id.saveBtn);</span>
+        <span class="s1">Button cancel = myView.findViewById(R.id.cancelBtn);</span>
+
+
+        <span class="s1">cancel.setOnClickListener(</span><span class="s0">new </span><span class="s1">View.OnClickListener() {</span>
+            <span class="s1">@Override</span>
+            <span class="s0">public void </span><span class="s1">onClick(View v) {</span>
+                <span class="s1">dialog.dismiss();</span>
+            <span class="s1">}</span>
+        <span class="s1">});</span>
+
+        <span class="s1">save.setOnClickListener(</span><span class="s0">new </span><span class="s1">View.OnClickListener() {</span>
+            <span class="s1">@Override</span>
+            <span class="s0">public void </span><span class="s1">onClick(View v) {</span>
+                <span class="s1">String mTask = task.getText().toString().trim();</span>
+                <span class="s1">String mDescription = description.getText().toString().trim();</span>
+                <span class="s1">String mDateline = dateline.getText().toString().trim();</span>
+               <span class="s1">String id = reference.push().getKey();</span>
+               <span class="s2">// String id = UUID.randomUUID().toString();</span>
+                <span class="s1">String mEmail = email.getText().toString();</span>
+                <span class="s1">String date = DateFormat.getDateInstance().format(</span><span class="s0">new </span><span class="s1">Date());</span>
+
+                <span class="s0">if </span><span class="s1">(TextUtils.isEmpty(mTask)) {</span>
+                    <span class="s1">task.setError(</span><span class="s3">&quot;Task Required!&quot;</span><span class="s1">);</span>
+                    <span class="s0">return</span><span class="s1">;</span>
+                <span class="s1">}</span>
+                <span class="s0">if </span><span class="s1">(TextUtils.isEmpty(mDescription)) {</span>
+                    <span class="s1">description.setError(</span><span class="s3">&quot;Description is required&quot;</span><span class="s1">);</span>
+                    <span class="s0">return</span><span class="s1">;</span>
+                <span class="s1">} </span><span class="s0">else </span><span class="s1">{</span>
+                    <span class="s2">//</span>
+                    <span class="s1">loader.setMessage(</span><span class="s3">&quot;Adding your data!&quot;</span><span class="s1">);</span>
+                    <span class="s1">loader.setCanceledOnTouchOutside(</span><span class="s0">false</span><span class="s1">);</span>
+                    <span class="s1">loader.show();</span>
+
+                    <span class="s1">Modal modal = </span><span class="s0">new </span><span class="s1">Modal(mTask, mDescription, mDateline, id, date);</span>
+                    <span class="s2">// Create a new user with a first and last name</span>
+                    <span class="s1">UID = mAuth.getCurrentUser().getUid();</span>
+
+                    <span class="s1">DocumentReference documentReference = db.collection(</span><span class="s3">&quot;users&quot;</span><span class="s1">).document(UID);</span>
+
+                    <span class="s1">Map&lt;String, Object&gt; task = </span><span class="s0">new </span><span class="s1">HashMap&lt;&gt;();</span>
+                    <span class="s1">task.put(</span><span class="s3">&quot;id&quot;</span><span class="s1">, id);</span>
+                    <span class="s1">task.put(</span><span class="s3">&quot;task&quot;</span><span class="s1">, mTask);</span>
+                    <span class="s1">task.put(</span><span class="s3">&quot;description&quot;</span><span class="s1">, mDescription);</span>
+                    <span class="s1">task.put(</span><span class="s3">&quot;dateline&quot;</span><span class="s1">, mDateline);</span>
+                    <span class="s1">task.put(</span><span class="s3">&quot;email&quot;</span><span class="s1">, mEmail);</span>
+                    <span class="s1">task.put(</span><span class="s3">&quot;date&quot;</span><span class="s1">, date);</span>
+
+
+                    <span class="s2">// Add a new document with a generated ID</span>
+                    <span class="s1">documentReference.collection(</span><span class="s3">&quot;tasks&quot;</span><span class="s1">)</span>
+                            <span class="s1">.add(task)</span>
+                            <span class="s1">.addOnSuccessListener(</span><span class="s0">new </span><span class="s1">OnSuccessListener&lt;DocumentReference&gt;() {</span>
+                                <span class="s1">@Override</span>
+                                <span class="s0">public void </span><span class="s1">onSuccess(DocumentReference documentReference) {</span>
+                                    <span class="s1">Toast.makeText(getContext(), </span><span class="s3">&quot;Task has been inserted successfully&quot;</span><span class="s1">, Toast.LENGTH_SHORT).show();</span>
+                                    <span class="s1">loader.dismiss();</span>
+
+                                <span class="s1">}</span>
+                            <span class="s1">})</span>
+                            <span class="s1">.addOnFailureListener(</span><span class="s0">new </span><span class="s1">OnFailureListener() {</span>
+                                <span class="s1">@Override</span>
+                                <span class="s0">public void </span><span class="s1">onFailure(@NonNull Exception e) {</span>
+                                    <span class="s1">Toast.makeText(getContext(), </span><span class="s3">&quot;Create Task failed!!&quot; </span><span class="s1">+ e, Toast.LENGTH_SHORT).show();</span>
+                                    <span class="s1">loader.dismiss();</span>
+                                <span class="s1">}</span>
+                            <span class="s1">});</span>
+                <span class="s1">}</span>
+                <span class="s1">dialog.dismiss();</span>
+            <span class="s1">}</span>
+        <span class="s1">});</span>
+        <span class="s1">dialog.show();</span>
+    <span class="s1">}</span>
+
+    <span class="s2">/*   reference.child(id).setValue(modal).addOnCompleteListener(new OnCompleteListener&lt;Void&gt;() { 
+           @Override 
+           public void onComplete(@NonNull Task&lt;Void&gt; task) { 
+               if (task.isSuccessful()) { 
+                   Toast.makeText(getContext(), &quot;Task has been inserted successfully&quot;, Toast.LENGTH_SHORT).show(); 
+                   loader.dismiss(); 
+               } else { 
+                   String error = task.getException().toString(); 
+                   Toast.makeText(getContext(), &quot;Failed: &quot; + error, Toast.LENGTH_SHORT).show(); 
+                   loader.dismiss(); 
+               } 
+ 
+           } 
+       }); 
+   } 
+   dialog.dismiss(); 
+ 
+ 
+} 
+}); 
+dialog.show(); 
+}*/</span>
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">onStart() {</span>
+        <span class="s0">super</span><span class="s1">.onStart();</span>
+
+        <span class="s1">Query query = db.collection(</span><span class="s3">&quot;users&quot;</span><span class="s1">).document(onlineUserID).collection(</span><span class="s3">&quot;tasks&quot;</span><span class="s1">);</span>
+        <span class="s1">FirestoreRecyclerOptions&lt;Modal&gt; options = </span><span class="s0">new </span><span class="s1">FirestoreRecyclerOptions.Builder&lt;Modal&gt;()</span>
+                <span class="s1">.setQuery(query, Modal.</span><span class="s0">class</span><span class="s1">)</span>
+                <span class="s1">.build();</span>
+       <span class="s2">/* FirebaseRecyclerOptions&lt;Modal&gt; options = new FirebaseRecyclerOptions.Builder&lt;Modal&gt;() 
+                .setQuery(reference, Modal.class) 
+                .build(); 
+ 
+       */</span>
+
+        <span class="s1">FirestoreRecyclerAdapter adapter = </span><span class="s0">new </span><span class="s1">FirestoreRecyclerAdapter&lt;Modal, MyViewHolder&gt;(options) {</span>
+            <span class="s1">@NonNull</span>
+            <span class="s1">@Override</span>
+            <span class="s2">//Usually involves inflating a layout from XML and returning the holder</span>
+            <span class="s0">public </span><span class="s1">MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, </span><span class="s0">int </span><span class="s1">viewType) {</span>
+                <span class="s2">// Inflate the custom layout</span>
+                <span class="s1">View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.retrieved_layout, parent, </span><span class="s0">false</span><span class="s1">);</span>
+                <span class="s2">// Return a new holder instance</span>
+                <span class="s0">return new </span><span class="s1">MyViewHolder(view);</span>
+            <span class="s1">}</span>
+
+            <span class="s1">@Override</span>
+            <span class="s0">public void </span><span class="s1">onBindViewHolder(MyViewHolder holder, </span><span class="s0">int </span><span class="s1">position, Modal modal) {</span>
+                <span class="s1">holder.setDate((modal.getDate()));</span>
+                <span class="s1">holder.setTask(modal.getTask());</span>
+                <span class="s1">holder.setDesc(modal.getDescription());</span>
+                <span class="s1">holder.setDateline(modal.getDateline());</span>
+
+             <span class="s2">// idUpdate =  holder.getAdapterPosition().getId()</span>
+
+                <span class="s1">holder.mView.setOnClickListener(</span><span class="s0">new </span><span class="s1">View.OnClickListener() {</span>
+                    <span class="s1">@Override</span>
+                    <span class="s0">public void </span><span class="s1">onClick(View v) {</span>
+                        <span class="s1">idUpdate =  modal.getId();</span>
+                        <span class="s2">//key = reference.getKey();</span>
+                        <span class="s2">//  id = reference.getId();</span>
+                        <span class="s1">task = modal.getTask();</span>
+                        <span class="s1">description = modal.getDescription();</span>
+                        <span class="s1">dateline = modal.getDateline();</span>
+
+                        <span class="s1">updateTask1();</span>
+
+                    <span class="s1">}</span>
+                <span class="s1">});</span>
+            <span class="s1">}</span>
+
+        <span class="s1">};</span>
+
+        <span class="s1">recyclerView.setHasFixedSize(</span><span class="s0">true</span><span class="s1">);</span>
+        <span class="s1">recyclerView.setLayoutManager(</span><span class="s0">new </span><span class="s1">LinearLayoutManager(getActivity()));</span>
+        <span class="s1">recyclerView.setAdapter(adapter);</span>
+        <span class="s1">adapter.startListening();</span>
+    <span class="s1">}</span>
+
+
+
+    <span class="s0">private void </span><span class="s1">updateTask1() {</span>
+        <span class="s1">AlertDialog.Builder myDialog = </span><span class="s0">new </span><span class="s1">AlertDialog.Builder(getContext());</span>
+        <span class="s1">LayoutInflater inflater = LayoutInflater.from(getContext());</span>
+        <span class="s1">View view = inflater.inflate(R.layout.update_data, </span><span class="s0">null</span><span class="s1">);</span>
+        <span class="s1">myDialog.setView(view);</span>
+        <span class="s1">myDialog.show();</span>
+
+
+        <span class="s0">final </span><span class="s1">AlertDialog dialog = myDialog.create();</span>
+        <span class="s1">String id = reference.push().getKey();</span>
+        <span class="s1">String date = DateFormat.getDateInstance().format(</span><span class="s0">new </span><span class="s1">Date());</span>
+        <span class="s0">final </span><span class="s1">EditText mTask = view.findViewById(R.id.mEditTextTask);</span>
+        <span class="s0">final </span><span class="s1">EditText mDescription = view.findViewById(R.id.mEditTextDescription);</span>
+        <span class="s0">final </span><span class="s1">EditText mDateline = view.findViewById(R.id.mEditTextDateline);</span>
+        <span class="s1">mTask.setText(task);</span>
+        <span class="s1">mTask.setSelection(task.length());</span>
+
+        <span class="s1">mDescription.setText(description);</span>
+        <span class="s1">mDescription.setSelection(description.length());</span>
+
+        <span class="s1">mDateline.setText(dateline);</span>
+        <span class="s1">mDateline.setSelection(dateline.length());</span>
+
+
+        <span class="s1">Button delButton = view.findViewById(R.id.btnDelete);</span>
+        <span class="s1">Button updateButton = view.findViewById(R.id.btnUpdate);</span>
+
+        <span class="s1">updateButton.setOnClickListener(</span><span class="s0">new </span><span class="s1">View.OnClickListener() {</span>
+            <span class="s1">@Override</span>
+            <span class="s0">public void </span><span class="s1">onClick(View v) {</span>
+                <span class="s1">task = mTask.getText().toString().trim();</span>
+                <span class="s1">description = mDescription.getText().toString().trim();</span>
+                <span class="s1">dateline = mDateline.getText().toString().trim();</span>
+
+                <span class="s1">String date = DateFormat.getDateInstance().format(</span><span class="s0">new </span><span class="s1">Date());</span>
+
+                <span class="s1">Modal modal = </span><span class="s0">new </span><span class="s1">Modal(task, description, dateline, id, date);</span>
+
+                <span class="s1">DocumentReference documentReference2 = db.collection(</span><span class="s3">&quot;users&quot;</span><span class="s1">).document(onlineUserID);</span>
+
+                <span class="s1">Map&lt;String, Object&gt; task1 = </span><span class="s0">new </span><span class="s1">HashMap&lt;&gt;();</span>
+                <span class="s1">task1.put(</span><span class="s3">&quot;id&quot;</span><span class="s1">, id);</span>
+                <span class="s1">task1.put(</span><span class="s3">&quot;task&quot;</span><span class="s1">, task);</span>
+                <span class="s1">task1.put(</span><span class="s3">&quot;description&quot;</span><span class="s1">, description);</span>
+                <span class="s1">task1.put(</span><span class="s3">&quot;dateline&quot;</span><span class="s1">, dateline);</span>
+                <span class="s2">//  task.put(&quot;email&quot;, mEmail);</span>
+                <span class="s1">task1.put(</span><span class="s3">&quot;date&quot;</span><span class="s1">, date);</span>
+
+
+                <span class="s1">documentReference2.collection(</span><span class="s3">&quot;tasks&quot;</span><span class="s1">).whereEqualTo(</span><span class="s3">&quot;id&quot;</span><span class="s1">, idUpdate).get().addOnCompleteListener(</span><span class="s0">new </span><span class="s1">OnCompleteListener&lt;QuerySnapshot&gt;() {</span>
+                    <span class="s1">@Override</span>
+                    <span class="s0">public void </span><span class="s1">onComplete(@NonNull Task&lt;QuerySnapshot&gt; task) {</span>
+                        <span class="s0">if </span><span class="s1">(task.isSuccessful()) {</span>
+                            <span class="s0">for </span><span class="s1">(QueryDocumentSnapshot document : task.getResult()) {</span>
+                                <span class="s1">docId = document.getId();</span>
+                                <span class="s1">Log.i(</span><span class="s3">&quot;MyComment&quot;</span><span class="s1">, docId + </span><span class="s3">&quot;: &quot; </span><span class="s1">+ document.getData());</span>
+                               <span class="s2">// docId = document.getId();</span>
+                                <span class="s1">documentReference2.collection(</span><span class="s3">&quot;tasks&quot;</span><span class="s1">).document(docId).update(task1).addOnCompleteListener(</span><span class="s0">new </span><span class="s1">OnCompleteListener&lt;Void&gt;() {</span>
+                                    <span class="s1">@Override</span>
+                                    <span class="s0">public void </span><span class="s1">onComplete(@NonNull Task&lt;Void&gt; task) {</span>
+                                        <span class="s0">if </span><span class="s1">(task.isSuccessful()) {</span>
+                                            <span class="s1">Toast.makeText(getContext(), </span><span class="s3">&quot;Data has been updated successfully&quot;</span><span class="s1">, Toast.LENGTH_SHORT).show();</span>
+                                            <span class="s1">dialog.dismiss();</span>
+                                        <span class="s1">} </span><span class="s0">else </span><span class="s1">{</span>
+                                            <span class="s1">String err = task.getException().toString();</span>
+                                            <span class="s1">Toast.makeText(getContext(), </span><span class="s3">&quot;update failed &quot; </span><span class="s1">+ err, Toast.LENGTH_SHORT).show();</span>
+                                        <span class="s1">}</span>
+                                    <span class="s1">}</span>
+                                <span class="s1">});</span>
+
+                <span class="s1">}</span>
+                <span class="s1">} </span><span class="s0">else </span><span class="s1">{</span>
+                            <span class="s1">Log.i(</span><span class="s3">&quot;MyComment&quot;</span><span class="s1">, </span><span class="s3">&quot;Error: &quot; </span><span class="s1">+ task.getException());</span>
+                            <span class="s1">Toast.makeText(getContext(), </span><span class="s3">&quot;Error retrieving my tasks&quot;</span><span class="s1">,</span>
+                                    <span class="s1">Toast.LENGTH_LONG).show();</span>
+                        <span class="s1">}</span>
+
+                    <span class="s1">}</span>
+
+
+                <span class="s1">});</span>
+
+
+            <span class="s1">}</span>
+        <span class="s1">});</span>
+    <span class="s1">}</span>
+
+<span class="s2">/* 
+                documentReference2.collection(&quot;tasks&quot;).document(docId).update(task1).addOnCompleteListener(new OnCompleteListener&lt;Void&gt;() { 
+                    @Override 
+                    public void onComplete(@NonNull Task&lt;Void&gt; task) { 
+                        if (task.isSuccessful()) { 
+                            Toast.makeText(getContext(), &quot;Data has been updated successfully&quot;, Toast.LENGTH_SHORT).show(); 
+                        } else { 
+                            String err = task.getException().toString(); 
+                            Toast.makeText(getContext(), &quot;update failed &quot; + err, Toast.LENGTH_SHORT).show(); 
+                        } 
+                    } 
+                }); 
+ 
+ 
+            } 
+        }); 
+    } 
+*/</span>
+
+
+
+       <span class="s2">/* FirebaseRecyclerAdapter&lt;Modal, MyViewHolder&gt; adapter = new FirebaseRecyclerAdapter&lt;Modal, MyViewHolder&gt;(options) { 
+            @Override 
+            protected void onBindViewHolder(@NonNull MyViewHolder holder, final int position, @NonNull final Modal modal) { 
+                holder.setDate(modal.getDate()); 
+                holder.setTask(modal.getTask()); 
+                holder.setDesc(modal.getDescription()); 
+                holder.setDateline(modal.getDateline()); 
+ 
+                holder.mView.setOnClickListener(new View.OnClickListener() { 
+                    @Override 
+                    public void onClick(View v) { 
+                        key = getRef(position).getKey(); 
+                        task = modal.getTask(); 
+                        description = modal.getDescription(); 
+                        dateline = modal.getDateline(); 
+ 
+                        updateTask(); 
+                    } 
+                }); 
+ 
+ 
+            }*/</span>
+
+
+    <span class="s0">public static class </span><span class="s1">MyViewHolder </span><span class="s0">extends </span><span class="s1">RecyclerView.ViewHolder {</span>
+        <span class="s1">View mView;</span>
+
+        <span class="s0">public </span><span class="s1">MyViewHolder(@NonNull View itemView) {</span>
+            <span class="s0">super</span><span class="s1">(itemView);</span>
+            <span class="s1">mView = itemView;</span>
+        <span class="s1">}</span>
+
+        <span class="s0">public void </span><span class="s1">setTask(String task) {</span>
+            <span class="s1">TextView taskTectView = mView.findViewById(R.id.taskTv);</span>
+            <span class="s1">taskTectView.setText(task);</span>
+        <span class="s1">}</span>
+
+        <span class="s0">public void </span><span class="s1">setDesc(String desc) {</span>
+            <span class="s1">TextView descTectView = mView.findViewById(R.id.descriptionTv);</span>
+            <span class="s1">descTectView.setText(desc);</span>
+        <span class="s1">}</span>
+
+        <span class="s0">public void </span><span class="s1">setDateline(String dateline) {</span>
+            <span class="s1">TextView datelineTectView = mView.findViewById(R.id.dateDueTv);</span>
+            <span class="s1">datelineTectView.setText(dateline);</span>
+        <span class="s1">}</span>
+
+        <span class="s0">public void </span><span class="s1">setDate(String date) {</span>
+            <span class="s1">TextView dateTextView = mView.findViewById(R.id.dateTv);</span>
+            <span class="s1">dateTextView.setText(date);</span>
+        <span class="s1">}</span>
+
+    <span class="s1">}</span>
+<span class="s1">}</span>
+
+    <span class="s2">/*private void updateTask() { 
+        AlertDialog.Builder myDialog = new AlertDialog.Builder(getContext()); 
+        LayoutInflater inflater = LayoutInflater.from(getContext()); 
+        View view = inflater.inflate(R.layout.update_data, null); 
+        myDialog.setView(view); 
+ 
+        final AlertDialog dialog = myDialog.create(); 
+ 
+        final EditText mTask = view.findViewById(R.id.mEditTextTask); 
+        final EditText mDescription = view.findViewById(R.id.mEditTextDescription); 
+        final EditText mDateline = view.findViewById(R.id.mEditTextDateline); 
+ 
+        mTask.setText(task); 
+     //   mTask.setSelection(task.length()); 
+ 
+        mDescription.setText(description); 
+     //   mDescription.setSelection(description.length()); 
+ 
+        mDateline.setText(dateline); 
+        //mDateline.setSelection(dateline.length()); 
+ 
+ 
+        Button delButton = view.findViewById(R.id.btnDelete); 
+        Button updateButton = view.findViewById(R.id.btnUpdate); 
+ 
+        updateButton.setOnClickListener(new View.OnClickListener() { 
+            @Override 
+            public void onClick(View v) { 
+                task = mTask.getText().toString().trim(); 
+                description = mDescription.getText().toString().trim(); 
+                dateline = mDateline.getText().toString().trim(); 
+ 
+                String date = DateFormat.getDateInstance().format(new Date()); 
+ 
+                Modal modal = new Modal(task, description, dateline, key, date); 
+                 reference.collection(&quot;tasks&quot;).document(key).set(modal).addOnCompleteListener(new OnCompleteListener&lt;Void&gt;() { 
+                 @Override 
+                 public void onComplete(@NonNull Task&lt;Void&gt; task) { 
+                     if(task.isSuccessful()){ 
+                         Toast.makeText(getContext(),&quot;Data has been updated succcessfully&quot;,Toast.LENGTH_SHORT).show(); 
+                     } 
+                     else{ 
+                         String err = task.getException().toString(); 
+                         Toast.makeText(getContext(), &quot;update failed &quot;+err, Toast.LENGTH_SHORT).show(); 
+                     } 
+                 } 
+             }); 
+ 
+              /* 
+                reference.child(key).setValue(modal).addOnCompleteListener(new OnCompleteListener&lt;Void&gt;() { 
+                    @Override 
+                    public void onComplete(@NonNull Task&lt;Void&gt; task) { 
+ 
+                        if (task.isSuccessful()){ 
+                            Toast.makeText(getContext(), &quot;Data has been updated successfully&quot;, Toast.LENGTH_SHORT).show(); 
+                        }else { 
+                            String err = task.getException().toString(); 
+                            Toast.makeText(getContext(), &quot;update failed &quot;+err, Toast.LENGTH_SHORT).show(); 
+                        } 
+ 
+                    } 
+                }); 
+ 
+                dialog.dismiss(); 
+ 
+            } 
+        }); 
+ 
+        delButton.setOnClickListener(new View.OnClickListener() { 
+            @Override 
+            public void onClick(View v) { 
+                reference.child(key).removeValue().addOnCompleteListener(new OnCompleteListener&lt;Void&gt;() { 
+                    @Override 
+                    public void onComplete(@NonNull Task&lt;Void&gt; task) { 
+                        if (task.isSuccessful()){ 
+                            Toast.makeText(getContext(), &quot;Task deleted successfully&quot;, Toast.LENGTH_SHORT).show(); 
+                        }else { 
+                            String err = task.getException().toString(); 
+                            Toast.makeText(getContext(), &quot;Failed to delete task &quot;+ err, Toast.LENGTH_SHORT).show(); 
+                        } 
+                    } 
+                }); 
+                dialog.dismiss(); 
+            } 
+        }); 
+ 
+        dialog.show(); 
+    } 
+ 
+ 
+    @Override 
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) { 
+    // inflate menu 
+        inflater.inflate(R.menu.main_menu, menu); 
+        super.onCreateOptionsMenu(menu,inflater); 
+ 
+    } 
+ 
+    @Override 
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) { 
+        switch (item.getItemId()){ 
+            case R.id.logout: 
+                mAuth.signOut(); 
+                Intent intent  = new Intent(getActivity(), LoginActivity.class); 
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); 
+                startActivity(intent); 
+                getActivity().finish(); 
+        } 
+        return super.onOptionsItemSelected(item); 
+    } 
+ 
+ 
+ 
+ 
+ 
+ 
+    } 
+    */</span>
+
+</pre>
+</body>
+</html>

@@ -1,0 +1,106 @@
+<html>
+<head>
+<title>MainActivity2.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #0033b3;}
+.s1 { color: #080808;}
+.s2 { color: #067d17;}
+.s3 { color: #8c8c8c; font-style: italic;}
+</style>
+</head>
+<body bgcolor="#ffffff">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+MainActivity2.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">sg.edu.tp.todobuddyapp;</span>
+
+<span class="s0">import </span><span class="s1">androidx.annotation.NonNull;</span>
+<span class="s0">import </span><span class="s1">androidx.appcompat.app.AppCompatActivity;</span>
+<span class="s0">import </span><span class="s1">androidx.fragment.app.Fragment;</span>
+<span class="s0">import </span><span class="s1">com.wdullaer.materialdatetimepicker.date.DatePickerDialog;</span>
+<span class="s0">import </span><span class="s1">com.wdullaer.materialdatetimepicker.time.TimePickerDialog;</span>
+<span class="s0">import </span><span class="s1">com.allyants.notifyme.NotifyMe;</span>
+
+
+<span class="s0">import </span><span class="s1">android.os.Bundle;</span>
+<span class="s0">import </span><span class="s1">android.view.MenuItem;</span>
+<span class="s0">import </span><span class="s1">android.widget.EditText;</span>
+
+<span class="s0">import </span><span class="s1">android.content.Intent;</span>
+<span class="s0">import </span><span class="s1">android.os.Bundle;</span>
+
+<span class="s0">import </span><span class="s1">android.view.View;</span>
+<span class="s0">import </span><span class="s1">android.widget.Button;</span>
+<span class="s0">import </span><span class="s1">android.widget.EditText;</span>
+
+
+<span class="s0">import </span><span class="s1">java.util.Calendar;</span>
+
+<span class="s0">import </span><span class="s1">com.google.android.material.bottomnavigation.BottomNavigationView;</span>
+
+<span class="s0">import </span><span class="s1">java.util.Calendar;</span>
+
+<span class="s0">public class </span><span class="s1">MainActivity2 </span><span class="s0">extends </span><span class="s1">AppCompatActivity  {</span>
+        <span class="s0">private </span><span class="s1">String out;</span>
+        <span class="s0">private </span><span class="s1">String getKey;</span>
+
+    <span class="s1">@Override</span>
+    <span class="s0">protected void </span><span class="s1">onCreate(Bundle savedInstanceState) {</span>
+        <span class="s0">super</span><span class="s1">.onCreate(savedInstanceState);</span>
+        <span class="s1">setContentView(R.layout.activity_main2);</span>
+        <span class="s1">Intent intent = getIntent();</span>
+        <span class="s1">out = intent.getExtras().getString(</span><span class="s2">&quot;message_key&quot;</span><span class="s1">);</span>
+        <span class="s1">getKey = intent.getExtras().getString(</span><span class="s2">&quot;ID&quot;</span><span class="s1">);</span>
+
+       <span class="s3">// linking bottom navigation from activity_mainAct2 to java file</span>
+        <span class="s1">BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);</span>
+
+        <span class="s1">bottomNav.setOnNavigationItemSelectedListener(navListener);</span>
+        <span class="s3">// as soon as the application opens the first</span>
+        <span class="s3">// fragment should be shown to the user</span>
+        <span class="s3">// in this case it is HomeFragment fragment</span>
+        <span class="s1">getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,</span><span class="s0">new </span><span class="s1">HomeFragment()).commit();</span>
+    <span class="s1">}</span>
+    <span class="s0">public </span><span class="s1">Bundle getMyData() {</span>
+        <span class="s1">Bundle hm = </span><span class="s0">new </span><span class="s1">Bundle();</span>
+        <span class="s1">hm.putString(</span><span class="s2">&quot;val1&quot;</span><span class="s1">,out);</span>
+        <span class="s1">hm.putString(</span><span class="s2">&quot;val2&quot;</span><span class="s1">,getKey);</span>
+        <span class="s0">return </span><span class="s1">hm;</span>
+    <span class="s1">}</span>
+
+    <span class="s0">private </span><span class="s1">BottomNavigationView.OnNavigationItemSelectedListener navListener = </span><span class="s0">new </span><span class="s1">BottomNavigationView.OnNavigationItemSelectedListener() {</span>
+        <span class="s1">@Override</span>
+        <span class="s0">public boolean </span><span class="s1">onNavigationItemSelected(@NonNull MenuItem item) {</span>
+            <span class="s1">Fragment selectedFragment = </span><span class="s0">null</span><span class="s1">;</span>
+            <span class="s3">// By using switch we can easily get the selected fragment by using its id.</span>
+
+            <span class="s0">switch </span><span class="s1">(item.getItemId()){</span>
+                <span class="s3">//linking to id in menu</span>
+                <span class="s3">// if</span>
+                <span class="s0">case </span><span class="s1">R.id.navigation_home:</span>
+                <span class="s1">selectedFragment = </span><span class="s0">new </span><span class="s1">HomeFragment();</span>
+
+                <span class="s0">break</span><span class="s1">;</span>
+                <span class="s0">case </span><span class="s1">R.id.navigation_timer:</span>
+                    <span class="s1">selectedFragment = </span><span class="s0">new </span><span class="s1">TimerFragment();</span>
+                    <span class="s0">break</span><span class="s1">;</span>
+                <span class="s0">case </span><span class="s1">R.id.navigation_profile:</span>
+                    <span class="s1">selectedFragment = </span><span class="s0">new </span><span class="s1">ProfileFragment();</span>
+                    <span class="s0">break</span><span class="s1">;</span>
+
+
+            <span class="s1">}</span>
+            <span class="s3">// It will help to replace from  one fragment to other.</span>
+            <span class="s1">getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,selectedFragment).commit();</span>
+
+            <span class="s0">return true</span><span class="s1">;</span>
+        <span class="s1">}</span>
+
+    <span class="s1">};</span>
+
+<span class="s1">}</span></pre>
+</body>
+</html>

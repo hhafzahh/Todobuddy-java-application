@@ -1,0 +1,140 @@
+<html>
+<head>
+<title>SignupActivity.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #0033b3;}
+.s1 { color: #080808;}
+.s2 { color: #8c8c8c; font-style: italic;}
+.s3 { color: #1750eb;}
+.s4 { color: #067d17;}
+</style>
+</head>
+<body bgcolor="#ffffff">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+SignupActivity.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">sg.edu.tp.todobuddyapp;</span>
+
+<span class="s0">import </span><span class="s1">androidx.annotation.NonNull;</span>
+<span class="s0">import </span><span class="s1">androidx.appcompat.app.AppCompatActivity;</span>
+
+<span class="s0">import </span><span class="s1">android.content.Intent;</span>
+<span class="s0">import </span><span class="s1">android.os.Bundle;</span>
+<span class="s0">import </span><span class="s1">android.view.View;</span>
+<span class="s0">import </span><span class="s1">android.widget.EditText;</span>
+<span class="s0">import </span><span class="s1">android.widget.Toast;</span>
+
+<span class="s0">import </span><span class="s1">com.google.android.gms.tasks.OnCompleteListener;</span>
+<span class="s0">import </span><span class="s1">com.google.android.gms.tasks.OnFailureListener;</span>
+<span class="s0">import </span><span class="s1">com.google.android.gms.tasks.OnSuccessListener;</span>
+<span class="s0">import </span><span class="s1">com.google.android.gms.tasks.Task;</span>
+<span class="s0">import </span><span class="s1">com.google.firebase.auth.AuthResult;</span>
+<span class="s0">import </span><span class="s1">com.google.firebase.auth.FirebaseAuth;</span>
+<span class="s0">import </span><span class="s1">com.google.firebase.firestore.DocumentReference;</span>
+<span class="s0">import </span><span class="s1">com.google.firebase.firestore.FirebaseFirestore;</span>
+
+<span class="s0">import </span><span class="s1">java.util.HashMap;</span>
+<span class="s0">import </span><span class="s1">java.util.Map;</span>
+
+<span class="s0">public class </span><span class="s1">SignupActivity </span><span class="s0">extends </span><span class="s1">AppCompatActivity {</span>
+
+    <span class="s0">private </span><span class="s1">FirebaseAuth mAuth = FirebaseAuth.getInstance();</span>
+
+    <span class="s1">EditText firstName;</span>
+    <span class="s1">EditText lastName;</span>
+    <span class="s1">EditText email;</span>
+    <span class="s1">EditText mobileNumber;</span>
+    <span class="s1">EditText userName;</span>
+    <span class="s1">EditText password;</span>
+    <span class="s1">String userID;</span>
+    <span class="s2">// initalise</span>
+    <span class="s0">private </span><span class="s1">FirebaseFirestore fStore;</span>
+
+    <span class="s1">@Override</span>
+    <span class="s0">protected void </span><span class="s1">onCreate(Bundle savedInstanceState) {</span>
+        <span class="s0">super</span><span class="s1">.onCreate(savedInstanceState);</span>
+        <span class="s1">setContentView(R.layout.activity_signup);</span>
+        <span class="s2">// get firestore instance.</span>
+        <span class="s1">fStore = FirebaseFirestore.getInstance();</span>
+        <span class="s1">firstName = (EditText) findViewById(R.id.editText1);</span>
+        <span class="s1">lastName = (EditText) findViewById(R.id.editTextTextPersonName3);</span>
+        <span class="s1">email = (EditText) findViewById(R.id.editTextTextEmailAddress);</span>
+        <span class="s1">mobileNumber = (EditText) findViewById(R.id.editTextNumber);</span>
+        <span class="s1">userName = (EditText) findViewById(R.id.editTextTextPersonName5);</span>
+        <span class="s1">password = (EditText) findViewById(R.id.editTextTextPassword2);</span>
+    <span class="s1">}</span>
+
+    <span class="s0">public void </span><span class="s1">clickSignup1(View v) {</span>
+        <span class="s2">//create 2 variables to hold email and password</span>
+        <span class="s1">String userFirst = firstName.getText().toString();</span>
+        <span class="s1">String userLast = lastName.getText().toString();</span>
+        <span class="s1">String userEmail = email.getText().toString();</span>
+        <span class="s1">String userMobile = mobileNumber.getText().toString();</span>
+        <span class="s1">String username = userName.getText().toString();</span>
+        <span class="s1">String userPassword = password.getText().toString();</span>
+        <span class="s0">if</span><span class="s1">(userFirst.length() != </span><span class="s3">0 </span><span class="s1">&amp;&amp; userLast.length() != </span><span class="s3">0 </span><span class="s1">&amp;&amp; userEmail.length() !=</span><span class="s3">0 </span><span class="s1">&amp;&amp; userMobile.length() !=</span><span class="s3">0 </span><span class="s1">&amp;&amp; username.length() != </span><span class="s3">0  </span><span class="s1">&amp;&amp; userPassword.length() !=</span><span class="s3">0</span><span class="s1">){</span>
+            <span class="s0">if</span><span class="s1">(userPassword.length() &lt; </span><span class="s3">4</span><span class="s1">){</span>
+                <span class="s1">password.setError(</span><span class="s4">&quot;Password must be &gt; 4 chars&quot;</span><span class="s1">);</span>
+                <span class="s1">Toast.makeText(getApplicationContext(),</span><span class="s4">&quot;Password must be more than 4 characters&quot;</span><span class="s1">,Toast.LENGTH_SHORT).show();</span>
+
+
+
+
+
+            <span class="s1">}</span>
+            <span class="s0">else</span><span class="s1">{</span>
+                <span class="s1">mAuth.createUserWithEmailAndPassword(userEmail, userPassword)</span>
+                        <span class="s1">.addOnCompleteListener(</span><span class="s0">this</span><span class="s1">, </span><span class="s0">new </span><span class="s1">OnCompleteListener&lt;AuthResult&gt;() {</span>
+                            <span class="s1">@Override</span>
+                            <span class="s0">public void </span><span class="s1">onComplete(@NonNull Task&lt;AuthResult&gt; task) {</span>
+                                <span class="s0">if </span><span class="s1">(task.isSuccessful()) {</span>
+                                    <span class="s2">// Sign in success, update UI with the signed-in user's information</span>
+                                    <span class="s1">Toast.makeText(getApplicationContext(), </span><span class="s4">&quot;SignUp Successful&quot;</span><span class="s1">, Toast.LENGTH_LONG).show();</span>
+                                    <span class="s1">userID = mAuth.getCurrentUser().getUid();</span>
+                                    <span class="s1">DocumentReference documentReference = fStore.collection(</span><span class="s4">&quot;users&quot;</span><span class="s1">).document(userID);</span>
+                                    <span class="s2">//userDocIDs.add(documentReference.getId());</span>
+                                    <span class="s1">Map&lt;String, Object&gt; user = </span><span class="s0">new </span><span class="s1">HashMap&lt;&gt;();</span>
+                                    <span class="s1">user.put(</span><span class="s4">&quot;firstName&quot;</span><span class="s1">, userFirst);</span>
+                                    <span class="s1">user.put(</span><span class="s4">&quot;lastName&quot;</span><span class="s1">, userLast);</span>
+                                    <span class="s1">user.put(</span><span class="s4">&quot;email&quot;</span><span class="s1">, userEmail);</span>
+                                    <span class="s1">user.put(</span><span class="s4">&quot;mobileNumber&quot;</span><span class="s1">, userMobile);</span>
+                                    <span class="s1">user.put(</span><span class="s4">&quot;username&quot;</span><span class="s1">, username);</span>
+                                    <span class="s1">user.put(</span><span class="s4">&quot;password&quot;</span><span class="s1">, userPassword);</span>
+                                    <span class="s1">documentReference.set(user).addOnSuccessListener(</span><span class="s0">new </span><span class="s1">OnSuccessListener&lt;Void&gt;() {</span>
+                                        <span class="s1">@Override</span>
+                                        <span class="s0">public void </span><span class="s1">onSuccess(Void aVoid) {</span>
+                                            <span class="s1">Toast.makeText(getApplicationContext(), </span><span class="s4">&quot;User  created for&quot; </span><span class="s1">+ userID, Toast.LENGTH_SHORT).show();</span>
+                                        <span class="s1">}</span>
+                                    <span class="s1">}).addOnFailureListener(</span><span class="s0">new </span><span class="s1">OnFailureListener() {</span>
+                                        <span class="s1">@Override</span>
+                                        <span class="s0">public void </span><span class="s1">onFailure(@NonNull Exception e) {</span>
+                                            <span class="s1">Toast.makeText(getApplicationContext(), </span><span class="s4">&quot;Created failed&quot; </span><span class="s1">+ e.toString(),Toast.LENGTH_SHORT).show();</span>
+                                        <span class="s1">}</span>
+                                    <span class="s1">});</span>
+                                    <span class="s1">Intent myIntent = </span><span class="s0">new </span><span class="s1">Intent(getApplicationContext(),LoginActivity.</span><span class="s0">class</span><span class="s1">);</span>
+
+                                    <span class="s1">startActivity(myIntent);</span>
+                                <span class="s1">}</span>
+                                <span class="s0">else </span><span class="s1">{</span>
+                                    <span class="s2">// If sign in fails, display a message to the user.</span>
+                                    <span class="s2">// If sign in fails, display a message to the user.</span>
+                                    <span class="s1">Toast.makeText(getApplicationContext(), </span><span class="s4">&quot;SignUp failed&quot;</span><span class="s1">, Toast.LENGTH_LONG).show();</span>
+                                <span class="s1">}</span>
+
+                            <span class="s1">}</span>
+
+                            <span class="s2">//authenticate with firebase</span>
+                        <span class="s1">});</span>
+            <span class="s1">}</span>
+        <span class="s1">}</span>
+        <span class="s0">else</span><span class="s1">{</span>
+            <span class="s1">Toast.makeText(getApplicationContext(),</span><span class="s4">&quot;Fill in all fields of the form! Sign Up unsuccessful&quot;</span><span class="s1">,Toast.LENGTH_SHORT).show();</span>
+        <span class="s1">}</span>
+
+    <span class="s1">}</span>
+<span class="s1">}</span></pre>
+</body>
+</html>

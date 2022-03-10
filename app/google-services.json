@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "931542018563",
+    "project_id": "todobuddyapp",
+    "storage_bucket": "todobuddyapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:931542018563:android:4c9c1d5acc8fb6c55cbc36",
+        "android_client_info": {
+          "package_name": "sg.edu.tp.todobuddyapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "931542018563-74nceasobkdf4hccvp7uvkce790ht7d5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAhd67zGSHVSgVsIoaJULqgthbF4xECmNA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "931542018563-74nceasobkdf4hccvp7uvkce790ht7d5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

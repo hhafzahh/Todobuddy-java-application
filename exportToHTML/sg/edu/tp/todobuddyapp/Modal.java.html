@@ -1,0 +1,95 @@
+<html>
+<head>
+<title>Modal.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #0033b3;}
+.s1 { color: #080808;}
+.s2 { color: #8c8c8c; font-style: italic;}
+</style>
+</head>
+<body bgcolor="#ffffff">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+Modal.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">sg.edu.tp.todobuddyapp;</span>
+
+<span class="s0">import </span><span class="s1">android.widget.EditText;</span>
+<span class="s0">import </span><span class="s1">android.widget.TextView;</span>
+
+<span class="s0">import </span><span class="s1">com.google.firebase.firestore.PropertyName;</span>
+
+<span class="s0">public class </span><span class="s1">Modal {</span>
+  <span class="s2">// public Modal(String mTask, String mDescription, String id, String date){}</span>
+    <span class="s0">private </span><span class="s1">String task , description,dateline, id , date;</span>
+
+
+
+    <span class="s0">public </span><span class="s1">Modal(String task, String description,String dateline, String id, String date) {</span>
+        <span class="s0">this</span><span class="s1">.task = task;</span>
+        <span class="s0">this</span><span class="s1">.description = description;</span>
+        <span class="s0">this</span><span class="s1">.dateline = dateline;</span>
+        <span class="s0">this</span><span class="s1">.id = id;</span>
+        <span class="s0">this</span><span class="s1">.date = date;</span>
+        <span class="s2">//this.email = email;</span>
+    <span class="s1">}</span>
+
+    <span class="s0">public </span><span class="s1">Modal() {</span>
+
+    <span class="s1">}</span>
+
+    <span class="s0">public </span><span class="s1">String getTask() {</span>
+        <span class="s0">return </span><span class="s1">task;</span>
+    <span class="s1">}</span>
+
+    <span class="s0">public void </span><span class="s1">setTask(String task) {</span>
+        <span class="s0">this</span><span class="s1">.task = task;</span>
+    <span class="s1">}</span>
+    
+    <span class="s0">public </span><span class="s1">String getDescription() {</span>
+        <span class="s0">return </span><span class="s1">description;</span>
+    <span class="s1">}</span>
+
+    <span class="s0">public void </span><span class="s1">setDescription(String description) {</span>
+        <span class="s0">this</span><span class="s1">.description = description;</span>
+    <span class="s1">}</span>
+    
+    <span class="s2">//public String getEmail() {</span>
+   <span class="s2">//     return email;</span>
+  <span class="s2">//  }</span>
+
+   <span class="s2">// public void setEmail(String email) {</span>
+     <span class="s2">//   this.email = email;</span>
+  <span class="s2">//  }</span>
+    <span class="s0">public </span><span class="s1">String getDateline() {</span>
+        <span class="s0">return </span><span class="s1">dateline;</span>
+    <span class="s1">}</span>
+
+    <span class="s0">public void </span><span class="s1">setDateline(String dateline) {</span>
+        <span class="s0">this</span><span class="s1">.dateline = dateline;</span>
+    <span class="s1">}</span>
+
+    
+    <span class="s0">public </span><span class="s1">String getId() {</span>
+        <span class="s0">return </span><span class="s1">id;</span>
+    <span class="s1">}</span>
+
+    <span class="s0">public void </span><span class="s1">setId(String id) {</span>
+        <span class="s0">this</span><span class="s1">.id = id;</span>
+    <span class="s1">}</span>
+
+
+    <span class="s0">public </span><span class="s1">String getDate() {</span>
+        <span class="s0">return </span><span class="s1">date;</span>
+    <span class="s1">}</span>
+
+    <span class="s0">public void </span><span class="s1">setDate(String date) {</span>
+        <span class="s0">this</span><span class="s1">.date = date;</span>
+    <span class="s1">}</span>
+<span class="s1">}</span>
+
+</pre>
+</body>
+</html>

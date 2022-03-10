@@ -1,0 +1,88 @@
+<html>
+<head>
+<title>LoginActivity.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #0033b3;}
+.s1 { color: #080808;}
+.s2 { color: #8c8c8c; font-style: italic;}
+.s3 { color: #1750eb;}
+.s4 { color: #067d17;}
+</style>
+</head>
+<body bgcolor="#ffffff">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+LoginActivity.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">sg.edu.tp.todobuddyapp;</span>
+
+<span class="s0">import </span><span class="s1">androidx.annotation.NonNull;</span>
+<span class="s0">import </span><span class="s1">androidx.appcompat.app.AppCompatActivity;</span>
+
+<span class="s0">import </span><span class="s1">android.content.Intent;</span>
+<span class="s0">import </span><span class="s1">android.os.Bundle;</span>
+<span class="s0">import </span><span class="s1">android.view.View;</span>
+<span class="s0">import </span><span class="s1">android.widget.EditText;</span>
+<span class="s0">import </span><span class="s1">android.widget.Toast;</span>
+
+<span class="s0">import </span><span class="s1">com.google.android.gms.tasks.OnCompleteListener;</span>
+<span class="s0">import </span><span class="s1">com.google.android.gms.tasks.Task;</span>
+<span class="s0">import </span><span class="s1">com.google.firebase.auth.AuthResult;</span>
+<span class="s0">import </span><span class="s1">com.google.firebase.auth.FirebaseAuth;</span>
+<span class="s0">import </span><span class="s1">com.google.firebase.auth.FirebaseUser;</span>
+
+<span class="s0">public class </span><span class="s1">LoginActivity </span><span class="s0">extends </span><span class="s1">AppCompatActivity {</span>
+    <span class="s2">//create and initalise firebase fireAuth and fireUser</span>
+    <span class="s0">private </span><span class="s1">FirebaseAuth mAuth = FirebaseAuth.getInstance();</span>
+    <span class="s0">private </span><span class="s1">FirebaseUser currentUser = mAuth.getCurrentUser();</span>
+    <span class="s1">EditText username;</span>
+    <span class="s1">EditText password;</span>
+    <span class="s1">EditText email;</span>
+    <span class="s1">@Override</span>
+    <span class="s0">protected void </span><span class="s1">onCreate(Bundle savedInstanceState) {</span>
+        <span class="s0">super</span><span class="s1">.onCreate(savedInstanceState);</span>
+        <span class="s1">setContentView(R.layout.activity_login);</span>
+        <span class="s1">email = (EditText) findViewById(R.id.editTextTextPersonName);</span>
+        <span class="s1">password = (EditText) findViewById(R.id.editTextTextPassword);</span>
+
+    <span class="s1">}</span>
+    <span class="s0">public void </span><span class="s1">clickForgot(View v){</span>
+        <span class="s1">Intent forgotActivity = </span><span class="s0">new </span><span class="s1">Intent(</span><span class="s0">this</span><span class="s1">,ForgotPasswordActivity.</span><span class="s0">class</span><span class="s1">);</span>
+        <span class="s1">startActivity(forgotActivity);</span>
+    <span class="s1">}</span>
+    <span class="s0">public void </span><span class="s1">clickLogin1(View v) {</span>
+        <span class="s1">String userEmail = email.getText().toString();</span>
+        <span class="s1">String userPassword = password.getText().toString();</span>
+        <span class="s0">if </span><span class="s1">(userEmail.length() != </span><span class="s3">0 </span><span class="s1">&amp;&amp; userPassword.length()!= </span><span class="s3">0</span><span class="s1">) {</span>
+            <span class="s1">mAuth.signInWithEmailAndPassword(userEmail, userPassword)</span>
+                    <span class="s1">.addOnCompleteListener(</span><span class="s0">this</span><span class="s1">, </span><span class="s0">new </span><span class="s1">OnCompleteListener&lt;AuthResult&gt;() {</span>
+                        <span class="s1">@Override</span>
+                        <span class="s0">public void </span><span class="s1">onComplete(@NonNull Task&lt;AuthResult&gt; task) {</span>
+                            <span class="s2">//to check iff task is successful or not -&gt; use if conditional.</span>
+                            <span class="s0">if </span><span class="s1">(task.isSuccessful()) {</span>
+                                <span class="s2">// Login success</span>
+
+                                <span class="s1">Toast.makeText(getApplicationContext(), </span><span class="s4">&quot;Login Successful.&quot;</span><span class="s1">, Toast.LENGTH_SHORT).show();</span>
+                                <span class="s1">String str = userEmail.toString();</span>
+                                <span class="s2">// Bring user to success activvity by using Intent</span>
+                                <span class="s1">Intent homeActivity = </span><span class="s0">new </span><span class="s1">Intent(getApplicationContext(), MainActivity2.</span><span class="s0">class</span><span class="s1">);</span>
+                                <span class="s1">homeActivity.putExtra(</span><span class="s4">&quot;message_key&quot;</span><span class="s1">,str);</span>
+                                <span class="s1">homeActivity.putExtra(</span><span class="s4">&quot;ID&quot;</span><span class="s1">, currentUser);</span>
+                                <span class="s1">startActivity(homeActivity);</span>
+
+                            <span class="s1">} </span><span class="s0">else </span><span class="s1">{</span>
+                                <span class="s2">// If login in fails, display a message to the user.</span>
+                                <span class="s1">Toast.makeText(getApplicationContext(), </span><span class="s4">&quot;Login failed.&quot;</span><span class="s1">, Toast.LENGTH_SHORT).show();</span>
+                            <span class="s1">}</span>
+                        <span class="s1">}</span>
+                    <span class="s1">});</span>
+        <span class="s1">}</span>
+        <span class="s0">else </span><span class="s1">{</span>
+            <span class="s1">Toast.makeText(</span><span class="s0">this</span><span class="s1">, </span><span class="s4">&quot;ERROR: Username and Password cannot be empty.&quot;</span><span class="s1">, Toast.LENGTH_SHORT).show();</span>
+        <span class="s1">}</span>
+    <span class="s1">}</span>
+<span class="s1">}</span></pre>
+</body>
+</html>
